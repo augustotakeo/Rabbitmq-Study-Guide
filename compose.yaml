@@ -1,25 +1,15 @@
 services:
-  my-rabbit:
-    image: rabbitmq:3-management
-    hostname: some-rabbit
-    ports:
-      - 8080:15672
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 5
   # consumer:
   #   build: 
   #     context: ./HelloWorld/Consumer
   #     target: Development
-  #   # volumes:
-  #   #   - type: bind
-  #   #     target: /src
-  #   #     source: ./HelloWorld/Consumer
-  #   depends_on:
-  #     my-rabbit:
-  #       condition: service_healthy
+  #   volumes:
+  #     - type: bind
+  #       target: /src
+  #       source: ./HelloWorld/Consumer
+    # depends_on:
+      # my-rabbit:
+      #   condition: service_healthy
   #   develop:
   #     watch:
   #       - action: rebuild
@@ -28,6 +18,17 @@ services:
   #   build: 
   #     context: ./HelloWorld/Producer
   #     target: Development
-  #   depends_on:
-  #     my-rabbit:
-  #       condition: service_healthy
+    # depends_on:
+      # my-rabbit:
+      #   condition: service_healthy
+  my-rabbit:
+    image: rabbitmq:3-management
+    hostname: some-rabbit
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
