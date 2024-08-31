@@ -13,7 +13,7 @@ var queueName = "hello";
 channel.QueueDeclare(queue: queueName,
                      autoDelete: false,
                      exclusive: false,
-                     durable: false,
+                     durable: true,
                      arguments: null);
 
 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);

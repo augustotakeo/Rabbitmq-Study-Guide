@@ -10,7 +10,7 @@ var channel = connection.CreateModel();
 var queueName = "hello";
 
 channel.QueueDeclare(queue: queueName,
-                     durable: false,
+                     durable: true,
                      autoDelete: false,
                      exclusive: false,
                      arguments: null);
@@ -18,9 +18,12 @@ channel.QueueDeclare(queue: queueName,
 var message = GetMessage(args);
 var body = System.Text.Encoding.UTF8.GetBytes(message);
 
+var properties = channel.CreateBasicProperties();
+properties.Persistent = true;
+
 channel.BasicPublish(exchange: string.Empty,
                      routingKey: queueName,
-                     basicProperties: null,
+                     basicProperties: properties,
                      body: body);
 
 Console.WriteLine($" [x] Sent {message}");
